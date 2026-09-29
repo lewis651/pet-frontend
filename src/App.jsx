@@ -780,41 +780,161 @@ function ShippingPage({ navigate }) {
 function Testimonials({ navigate, limit = null }) {
   const reviews = [
     {
-      name: "Sarah & David M.",
+      name: " The Harrison Family",
       location: "Dallas, Texas",
-      dog: "Bella (Teacup Yorkie)",
-      text: "Dazy’s Paw Haven exceeded every expectation! Little Bella arrived safely via flight nanny right to Dallas-Fort Worth airport. She came fully vaccinated with a complete health passport and was already well on her way with potty training."
+      dog: "Milo and Iya(Teacup Yorkie)",
+      text: "Dazy’s Paw Haven exceeded every expectation! Little milo and iya arrived safely via flight nanny right to Dallas-Fort Worth airport. They came fully vaccinated with a complete health passport and was already well on her way with potty training."
     },
     {
-      name: "The Harrison Family",
+      name: "Sarah & David M.",
       location: "Seattle, Washington",
-      dog: "Milo & Otis (Shih Tzu Brothers)",
-      text: "Adopting our two Shih Tzu boys from Dazy's was the best decision we've ever made. Their 15+ years of experience really shows in how calm, socialized, and healthy these pups are. The medical records were crystal clear!"
+      dog: "Otis (Yorkshire Terrier)",
+      text: "Adopting otis was one of the best decision we've ever made. Dazy's years of experience really shows in how calm, socialized, and healthy the pup is. The medical records were crystal clear!"
     },
     {
-      name: "Dr. Elena Rostova",
+      name: "Dr.Sharon Rivers",
       location: "Miami, Florida",
-      dog: "Teddy (Imperial Shih Tzu)",
-      text: "As a veterinarian myself, I am extremely cautious about pet shelters and breeders. Dazy's Paw Haven maintains impeccable standards. Teddy was completely up to date on vaccinations and microchipped with ISO standards."
+      dog: "Adam (Shih Tzu)",
+      text: "As a veterinarian myself, I am extremely cautious about pet shelters and breeders. Dazy's Paw Haven maintains impeccable standards. Adam was completely up to date on vaccinations and microchipped with ISO standards."
     },
     {
       name: "Marcus & Chloe Vance",
       location: "Chicago, Illinois",
-      dog: "Coco (Yorkshire Terrier)",
-      text: "From our first video call to Coco’s arrival at O'Hare with her flight nanny, the communication was seamless. Dazy's Paw Haven provided her full vaccination record, health guarantee, and even a puppy starter pack."
+      dog: "vera (Yorkshire Terrier)",
+      text: "From our first video call to vera’s arrival at O'Hare with her flight nanny, the communication was seamless. Dazy's Paw Haven provided her full vaccination record, health guarantee, and even a puppy starter pack."
     },
     {
-      name: "Amanda K.",
+      name: "Little Anny",
       location: "New York, NY",
-      dog: "Peanut (Micro Yorkie)",
-      text: "Peanut is my dream teacup Yorkie! He is tiny, hypoallergenic, playful, and so full of energy. Dazy's staff was so patient answering all my questions about feeding schedules and health warranties."
+      dog: "Lenny and Esther (Teacup Yorkie)",
+      text: "Lenny and Esther are my dream pets! they are so tiny, cute, playful, and lovely. Thank you Dazy. love you"
     },
     {
-      name: "Robert & Linda Chen",
+      name: "Robert .C",
       location: "Toronto, Canada",
-      dog: "Mochi (Party-Coat Shih Tzu)",
-      text: "International delivery to Canada was handled smoothly! Dazy's team took care of all international health certificates and customs paperwork. Mochi arrived happy, healthy, and ready for cuddles."
-    }
+      dog: " Elsa and Max(Teacup Yorkie)",
+      text: "International delivery to Canada was handled smoothly! Dazy's team took care of all international health certificates and customs paperwork. Elsa and Max arrived happy, healthy, and ready for cuddles."
+    },
+    {
+      name: "Jerry and veraline",
+      location: "Chicago, Illinois",
+      dog: " Charlie and Daisy(Yorkshire Terrier)",
+      text: "Absolutely amazing service from Dazy’s Paw Haven! Charlie and Daisy traveled comfortably via flight nanny to Chicago, fully vaccinated and with health certificates. They arrived confident and happy, making a stressful trip completely worry-free."
+    },
+    {
+      name: "Mirabel .G",
+      location: "Salt Lake City, Utah",
+      dog: "Oliver(Shih Tzu)",
+      text: "My experience with Dazy’s Paw Haven was exceptional! Oliver arrived safely in Salt Lake City, fully vaccinated and prepped for travel. Their attendants made sure the pup was comfortable and well-cared for every step of the way."
+    },
+    {
+      name: "Elizabeth Johnson",
+      location: "Miami, Florida",
+      dog: "Rocky, Eve and Sadie(Yorkshire Terrier)",
+      text: "Dazy’s Paw Haven truly exceeded expectations! Rocky, Eve and Sadie flew to Miami smoothly with complete health documentation. They arrived calm, happy, and ready to settle in, demonstrating the team’s professionalism and care."
+    },
+    {
+      name: "Sarah Anderson",
+      location: "Seattle, Washington",
+      dog: "Molly(Yorkshire Terrier)",
+      text: "I was beyond impressed with Dazy’s Paw Haven! Molly’s journey to Seattle was stress-free. She came with health passports and vaccination confirmation, making travel effortless and assuring our peace of mind."
+    },
+    {
+      name: "Rosalie Ortiz",
+      location: "Houston, Texas",
+      dog: "Nala(Yorkshire Terrier)",
+      text: "Dazy’s Paw Haven is absolutely reliable! Nala flew to Houston, arriving safely with full vaccination records and a health passport. They transitioned home smoothly thanks to the expert care provided."
+    },
+    {
+      name: "Valerie Clarke",
+      location: "Denver, Colorado",
+      dog: "Peanut(Yorkshire Terrier)",
+      text: "I can’t recommend Dazy’s Paw Haven enough! Peanut flight was seamless, and He arrived in Denver vaccinated, healthy, and calm. The team clearly prioritizes both comfort and safety."
+    },
+    {
+      name: "Julieta Hoffman",
+      location: "Phoenix, Arizona",
+      dog: "Zeus (Shih Tzu)",
+      text: "Outstanding service from Dazy’s Paw Haven! Zeus traveled effortlessly to Phoenix via flight nanny with comprehensive health documentation. He arrived healthy, safe, and content."
+    },
+    {
+      name: "Kelley Colton",
+      location: "Atlanta, Georgia",
+      dog: "Luna (Shih Tzu)",
+      text: "Exceptional attention from Dazy’s Paw Haven! Luna’s move to Atlanta went perfectly smooth. She was fully vaccinated, documented, and cared for with love throughout every stage of the flight journey. My kids love her."
+    },
+    {
+      name: "Bryce O’Neal",
+      location: "Orlando, Florida",
+      dog: " Daisy (Shih Tzu)",
+      text: "Incredible service from Dazy’s Paw Haven! Daisy arrived safely to Orlando airport, healthy, vaccinated, and with complete travel documentation. Her comfort and happiness was clearly the top priority."
+    },
+    {
+      name: "Joseph Lopez",
+      location: "Philadelphia , Pennsylvania",
+      dog: " Bella  (Shih Tzu)",
+      text: "Dazy’s Paw Haven exceeded our expectations in every way! Bella traveled to Philadelphia safely with health certificates and everything she needed. She was calm, happy, and ready for home life."
+    },
+    {
+      name: "Robert Jones",
+      location: "Charlotte, North Carolina",
+      dog: " Charlie  (Yorkshire Terrier)",
+      text: "Absolutely flawless experience with Dazy’s Paw Haven! Charlie flew safely to Charlotte, health documents in order and comfort ensured throughout. He arrived happy, healthy, and ready for a smooth home transition."
+    },
+    {
+      name: "The Wilson Family",
+      location: "San Francisco, California",
+      dog: " Thor (Yorkshire Terrier)",
+      text: "We are thoroughly impressed with Dazy’s Paw Haven! Thor’s journey to San Francisco was seamless. He came fully vaccinated and with health passports, arriving relaxed and content thanks to professional flight care."
+    },
+    {
+      name: "The Rogers Family",
+      location: " Phoenix, Arizona",
+      dog: " Jack  (Shih Tzu)",
+      text: "Dazy’s Paw Haven exceeded our expectations in every way! Jack traveled to Phoenix safely with health certificates and everything He needed. He was calm, happy, and ready for home life."
+    },
+    {
+      name: "Mr & Ms Kline",
+      location: "Dallas, Texas",
+      dog: " Apollo (Shih Tzu)",
+      text: "Dazy’s Paw Haven treated our furry boy with unmatched care! Apollo flew to Dallas, arriving calm, happy, and completely secure. His health passports and vaccination records added peace of mind, while potty training support ensured a smooth transition home."
+    },
+    {
+      name: "Micheal Thompson",
+      location: " Dallas, Texas",
+      dog: " Alexis (Shih Tzu)",
+      text: "I am deeply grateful to Dazy’s Paw Haven! Alexis’s journey to Dallas was stress-free. Safe, healthy, and fully cared for, they arrived with complete health documentation and the comfort of attentive flight support."
+    },
+    {
+      name: "The Andersons",
+      location: " Chicago, Illinois",
+      dog: " Abby (Shih Tzu)",
+      text: "An extraordinary experience with Dazy’s Paw Haven! Abby reached New York Airport safely. Vaccination checked, stress minimized, and every concern handled, she traveled happy and arrived gently ready for her new surroundings."
+    },
+    {
+      name: "Syvia Moore",
+      location: " Miami, Florida",
+      dog: " Bonnie (Teacup Yorkie)",
+      text: "Dazy’s Paw Haven turned a daunting trip into joy! Bonnie flew to Miami with care and attention at every stage. Health certificates verified, fully comfortable, and well-supervised, He arrived both safe and blissfully calm."
+    },
+    {
+      name: "Susan Smith",
+      location: " Seattle, Washington",
+      dog: " Edie (Teacup Yorkie)",
+      text: "Words cannot express our gratitude for Dazy’s Paw Haven! Edie’s journey to Seattle was seamless. His vaccination and health records were perfect, and thanks to loving flight support, He arrived calm, happy, and ready for home life."
+    },
+    {
+      name: "Jessica White",
+      location: " Houston, Texas",
+      dog: " Hope (Shih Tzu)",
+      text: "Dazy delivered exceptional care and professionalism! Hope flew to Houston confidently, fully vaccinated, and with precise health documentation. She smooth transition reflected true dedication to pet comfort and well-being."
+    },
+    {
+      name: "Joshua White",
+      location: " Denver, Colorado",
+      dog: " Frankie (Shih Tzu)",
+      text: "I felt completely reassured with Dazy’s Paw Haven! frankie flight to Denver was beautifully managed. Safe, healthy, and calm throughout, His travel was supported with wholehearted attention and a strong focus on happiness."
+    },
   ];
 
   let media = [
