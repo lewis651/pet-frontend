@@ -176,6 +176,7 @@ export default function PuppyDetail({ puppy, onClose }) {
                 >
                   <span aria-hidden="true">💬</span> Open Live Chat
                 </button>
+                
 
                 {whatsappLink && (
                   <a

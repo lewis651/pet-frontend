@@ -6,10 +6,9 @@ import PuppyDetail from './components/puppy-detail.jsx';
 import AdminPanel from './components/AdminPanel.jsx';
 import { MutedVideo } from './components/ui.jsx';
 
-// Updated FAQ details with Option A questions and answers (leaving the last question untouched)
 const ACCURATE_FAQS = FAQS.map((item, index) => {
   if (index === FAQS.length - 1) {
-    return item; // Keep the last question untouched
+    return item;
   }
 
   const optionAFAQS = [
@@ -34,7 +33,6 @@ const ACCURATE_FAQS = FAQS.map((item, index) => {
   return optionAFAQS[index] || item;
 });
 
-// Custom CSS animation keyframes
 const AnimationStyles = () => (
   <style>{`
     @keyframes floatSlow {
@@ -123,13 +121,13 @@ function Header({ page, navigate, browse }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#EEE4F4] bg-white/95 shadow-sm shadow-[#2D1B3E]/5 backdrop-blur-md transition-all duration-300">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-2 px-4 sm:px-6 lg:px-8">
-        <a href="#home" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} className="group flex shrink-0 items-center gap-2.5 sm:gap-3">
-          <b className="grid h-10 w-10 place-items-center rounded-2xl bg-[#2D1B3E] text-lg text-[#D99F38] shadow-md shadow-[#2D1B3E]/15 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 sm:h-11 sm:w-11 sm:text-xl">♥</b>
-          <span>
-            <b className="block text-base font-black text-[#2D1B3E] sm:text-xl">Dazy’s Paw Haven</b>
-            <small className="block text-[9px] font-extrabold uppercase tracking-[.18em] text-[#8668A1] sm:text-xs">Licensed Shelter &amp; Nursery</small>
+    <header className="sticky top-0 z-50 w-full border-b border-[#EEE4F4] bg-white/95 shadow-sm shadow-[#2D1B3E]/5 backdrop-blur-md">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-2 px-3 sm:px-6 lg:px-8">
+        <a href="#home" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} className="group flex min-w-0 shrink items-center gap-2 sm:gap-3">
+          <b className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-[#2D1B3E] text-base text-[#D99F38] shadow-md shadow-[#2D1B3E]/15 sm:h-11 sm:w-11 sm:text-xl">♥</b>
+          <span className="truncate">
+            <b className="block truncate text-sm font-black text-[#2D1B3E] sm:text-xl">Dazy’s Paw Haven</b>
+            <small className="block truncate text-[8px] font-extrabold uppercase tracking-[.15em] text-[#8668A1] sm:text-xs">Licensed Shelter &amp; Nursery</small>
           </span>
         </a>
 
@@ -159,7 +157,6 @@ function Header({ page, navigate, browse }) {
             Puppies
           </a>
 
-          {/* Dropdown 1: Sanctuary & Care */}
           <div className="relative">
             <button
               onClick={() => setOpenDropdown(openDropdown === 'sanctuary' ? null : 'sanctuary')}
@@ -191,7 +188,6 @@ function Header({ page, navigate, browse }) {
             )}
           </div>
 
-          {/* Dropdown 2: Guides & Community */}
           <div className="relative">
             <button
               onClick={() => setOpenDropdown(openDropdown === 'guides' ? null : 'guides')}
@@ -224,10 +220,10 @@ function Header({ page, navigate, browse }) {
           </div>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <button
             onClick={() => handleNavClick('donate')}
-            className={`inline-flex items-center gap-1.5 rounded-2xl border-2 border-[#D99F38] px-3.5 py-2 text-xs font-extrabold transition-all sm:px-4 sm:py-2.5 ${
+            className={`hidden sm:inline-flex items-center gap-1.5 rounded-2xl border-2 border-[#D99F38] px-3.5 py-2 text-xs font-extrabold transition-all sm:px-4 sm:py-2.5 ${
               page === 'donate'
                 ? 'bg-[#D99F38] text-white shadow-md'
                 : 'bg-[#FFF8EB] text-[#2D1B3E] hover:bg-[#D99F38] hover:text-white'
@@ -238,17 +234,18 @@ function Header({ page, navigate, browse }) {
 
           <button
             onClick={() => { setMenuOpen(false); browse(); }}
-            className="hidden sm:inline-flex rounded-2xl bg-[#2D1B3E] px-4 py-2.5 text-xs font-extrabold text-white shadow-md shadow-[#2D1B3E]/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#452B5E] hover:shadow-xl active:scale-95 sm:px-5 sm:py-3 sm:text-sm"
+            className="hidden sm:inline-flex rounded-2xl bg-[#2D1B3E] px-4 py-2.5 text-xs font-extrabold text-white shadow-md transition-all hover:bg-[#452B5E] active:scale-95 sm:px-5 sm:py-3 sm:text-sm"
           >
             Meet Puppies
           </button>
 
+          {/* Hamburger Menu Icon always firmly visible on mobile */}
           <button
             type="button"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             onClick={() => setMenuOpen(!menuOpen)}
-            className="grid h-10 w-10 place-items-center rounded-xl border border-[#E8DAF0] text-xl text-[#2D1B3E] xl:hidden transition-all duration-200 hover:bg-[#F2EAFA] active:scale-90"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#E8DAF0] text-xl text-[#2D1B3E] xl:hidden transition-all duration-200 hover:bg-[#F2EAFA] active:scale-90"
           >
             {menuOpen ? '✕' : '☰'}
           </button>
@@ -387,6 +384,12 @@ function Hero({ browse, navigate }) {
             >
               Licenses &amp; Credentials
             </button>
+            <button
+              onClick={() => navigate('donate')}
+              className="inline-flex sm:hidden items-center justify-center gap-2 rounded-2xl border-2 border-[#D99F38] bg-[#FFF8EB] px-7 py-4 text-sm font-extrabold text-[#2D1B3E] transition-all duration-300 hover:bg-[#D99F38] hover:text-white active:scale-95 shadow-sm"
+            >
+              <span>♥</span> Donate to Shelter
+            </button>
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs font-extrabold uppercase tracking-wider text-[#6C428E] sm:mt-10 sm:gap-6 lg:justify-start">
             <span className="inline-flex items-center gap-1.5 transition-transform duration-300 hover:scale-105"><span className="text-[#D99F38]">✓</span> 10-Year Health Warranty</span>
@@ -405,7 +408,7 @@ function Hero({ browse, navigate }) {
             </div>
           </div>
           <div className="animate-float-reverse relative sm:absolute -bottom-4 sm:-bottom-5 left-0 sm:-left-6 mt-4 sm:mt-0 flex max-w-full sm:max-w-[18rem] items-center gap-3.5 rounded-2xl border border-[#EEE4F4] bg-white/95 p-3.5 shadow-2xl backdrop-blur-md sm:p-4 transition-transform duration-300 hover:scale-105">
-            <img src={SHELTER_IMAGES[1]} alt="Shelter puppy" className="h-12 w-12 shrink-0 rounded-xl object-cover sm:h-14 sm:w-14" />
+            <img src={SHELTER_IMAGES[1]} alt="Shelter puppy" loading="lazy" decoding="async" className="h-12 w-12 shrink-0 rounded-xl object-cover sm:h-14 sm:w-14" />
             <span>
               <b className="block text-xs font-black text-[#2D1B3E] sm:text-sm">100% Health Guarantee</b>
               <span className="mt-0.5 block text-[11px] leading-4 text-[#8668A1] sm:text-xs sm:leading-5">Complete vet checkup &amp; microchip before travel.</span>
@@ -480,7 +483,7 @@ function DonatePage() {
                 onClick={() => openWhatsApp(t.amount, t.title)}
                 className="mt-6 w-full rounded-2xl bg-[#25D366] py-3 text-xs font-black text-white shadow-md transition-all hover:bg-[#1EBE5B] active:scale-95 flex items-center justify-center gap-2"
               >
-                <span>♥</span> Donate {t.amount}
+                <span>💬</span>Donate
               </button>
             </div>
           ))}
@@ -500,7 +503,7 @@ function DonatePage() {
               onClick={() => openWhatsApp("Custom Amount", "General Shelter Sponsorship")}
               className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-[#25D366] px-8 py-4 text-sm font-black text-white transition-all duration-300 hover:bg-[#1EBE5B] hover:scale-105 active:scale-95 shadow-xl"
             >
-              <span>♥</span> Chat to Donate
+              <span>💬</span> Live Chat on WhatsApp
             </button>
           </div>
         </div>
@@ -646,6 +649,7 @@ function Shelter() {
                 src={src}
                 alt={`Shelter community dog ${i + 1}`}
                 loading="lazy"
+                decoding="async"
                 className={`w-full rounded-2xl sm:rounded-[1.5rem] object-cover ring-2 ring-white/20 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:ring-[#EBCB8B] ${i === 0 ? 'row-span-2 aspect-[3/4]' : 'aspect-square'}`}
               />
             ))}
@@ -813,7 +817,10 @@ function Testimonials({ navigate, limit = null }) {
     }
   ];
 
-  let media = [...TESTIMONIAL_IMAGES.map((src, i) => ({ id: `photo-${i}`, src, type: 'image' })), ...TESTIMONIAL_VIDEOS.map((src, i) => ({ id: `video-${i}`, src, poster: TESTIMONIAL_IMAGES[i], type: 'video' }))];
+  let media = [
+    ...TESTIMONIAL_IMAGES.map((src, i) => ({ id: `photo-${i}`, src, type: 'image' })),
+    ...TESTIMONIAL_VIDEOS.map((src, i) => ({ id: `video-${i}`, src, poster: TESTIMONIAL_IMAGES[i], type: 'video' }))
+  ].filter((_, i) => i !== 5 && i !== 6 && i !== 7);
 
   if (limit) {
     media = media.slice(0, limit);
@@ -838,7 +845,7 @@ function Testimonials({ navigate, limit = null }) {
             return (
               <figure key={item.id} className="group overflow-hidden rounded-[1.5rem] sm:rounded-[1.75rem] bg-white shadow-md shadow-[#2D1B3E]/5 ring-1 ring-[#E8DAF0] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col justify-between">
                 <div>
-                  {item.type === 'video' ? <MutedVideo src={item.src} poster={item.poster} className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105" /> : <img src={item.src} alt={`Adopter story photo ${i + 1}`} loading="lazy" className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105" />}
+                  {item.type === 'video' ? <MutedVideo src={item.src} poster={item.poster} className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105" /> : <img src={item.src} alt={`Adopter story photo ${i + 1}`} loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105" />}
                   <figcaption className="p-5 sm:p-6">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-black uppercase tracking-wider text-[#6C428E] sm:text-xs">Verified Adoption</span>
@@ -875,7 +882,6 @@ function Testimonials({ navigate, limit = null }) {
   );
 }
 
-// FAQ Section with Option A questions and accurate responses
 function Faq() {
   const [open, setOpen] = useState(0);
   return (
@@ -907,13 +913,15 @@ function Faq() {
   );
 }
 
-function DayAtShelter() {
+function DayAtShelter({ limit = null }) {
+  const videoList = limit ? DAY_VIDEOS.slice(0, limit) : DAY_VIDEOS;
+
   return (
     <section id="day" className="bg-gradient-to-b from-[#FAF5EF] via-white to-[#FCF9FE] py-14 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Title eyebrow="Shelter Video Gallery" title="A Little More Of Life At The Haven" body="Watch clips from the shelter media collection. All videos play muted." />
         <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
-          {DAY_VIDEOS.map((src, i) => (
+          {videoList.map((src, i) => (
             <figure key={src} className="group overflow-hidden rounded-[1.5rem] sm:rounded-[1.75rem] bg-[#231233] shadow-lg ring-1 ring-[#2D1B3E]/10 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
               <MutedVideo src={src} poster={SHELTER_IMAGES[(i + 1) % SHELTER_IMAGES.length]} className="aspect-[3/4] w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </figure>
@@ -924,19 +932,17 @@ function DayAtShelter() {
   );
 }
 
-// PhotoJournal Section with Photos 14, 16, and 17 removed
 function PhotoJournal() {
-  // Filter out photo indices 13, 15, and 16 (Photos 14, 16, and 17)
   const filteredPhotos = PET_IMAGES.filter((_, i) => i !== 13 && i !== 15 && i !== 16);
 
   return (
     <section className="bg-gradient-to-br from-[#F2EAFA] via-[#FCF9FE] to-[#F8F1E6] py-14 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Title eyebrow="Photo Journal" title="The Faces Behind The Pawprints" body="A little gallery from the dogs, pups and people who make our shelter feel like home." />
+        <Title eyebrow="Photo Journal" title="The Faces Behind The Pawprints" body="A little gallery from the dogs and pups who make our shelter feel like home." />
         <div className="mt-10 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
           {filteredPhotos.map((src, i) => (
             <div key={src} className={`overflow-hidden rounded-2xl sm:rounded-[1.75rem] shadow-lg transition-transform duration-500 hover:scale-[1.03] ${i === 0 || i === 5 ? 'md:row-span-2' : ''}`}>
-              <img src={src} alt={`Shelter photo ${i + 1}`} loading="lazy" className="h-full min-h-40 sm:min-h-52 w-full object-cover transition-transform duration-700 hover:scale-110" />
+              <img src={src} alt={`Shelter photo ${i + 1}`} loading="lazy" decoding="async" className="h-full min-h-40 sm:min-h-52 w-full object-cover transition-transform duration-700 hover:scale-110" />
             </div>
           ))}
         </div>
@@ -1000,7 +1006,7 @@ function HomePage({ browse, navigate, onOpen, filter, setFilter, puppies }) {
       <PhotoJournal />
       <AdoptionCare />
       <ShelterPromise />
-      <DayAtShelter />
+      <DayAtShelter limit={8} />
       <Testimonials navigate={navigate} limit={6} />
       <Faq />
     </>
@@ -1037,26 +1043,57 @@ function AdoptionGuide() {
 }
 
 function ContactPage({ navigate }) {
-  const fields = [['Phone Hotline', '(800) 584-PAWS (7297)'], ['Email Support', 'adoptions@dazyspawhaven.org'], ['Shelter Nursery', 'Visits arranged by scheduled appointment']];
+  const whatsappNumber = "18005847297";
+  const openWhatsApp = () => {
+    const text = encodeURIComponent("Hello Dazy's Paw Haven! I have a question about available puppies.");
+    window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
+  };
+
+  const fields = [
+    ['Phone Hotline', '(800) 584-PAWS (7297)'], 
+    ['Live Chat Support', 'Direct messaging via WhatsApp'], 
+    ['Shelter Nursery', 'Visits arranged by scheduled appointment']
+  ];
+
   return (
     <section className="min-h-[70vh] bg-gradient-to-br from-[#FCF9FE] via-white to-[#F8F1E6] py-14 sm:py-20">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <Title eyebrow="Contact Us" title="Talk with our adoption team" body="Have questions about a specific puppy, flight nanny shipping, or our adoption process? Reach out anytime!" />
+        
         <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3">
-          {fields.map(([label, value]) => (
-            <article key={label} className="rounded-[1.5rem] border border-[#E8DAF0] bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-              <span className="rounded-full bg-[#F2EAFA] px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#6C428E] sm:text-xs">Official Hotline</span>
-              <h3 className="mt-4 text-lg sm:text-xl font-black text-[#2D1B3E] sm:mt-5">{label}</h3>
-              <p className="mt-2 text-xs sm:text-sm font-semibold leading-6 text-[#584168]">{value}</p>
+          {fields.map(([label, value], idx) => (
+            <article key={label} className="flex flex-col justify-between rounded-[1.5rem] border border-[#E8DAF0] bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+              <div>
+                <span className="rounded-full bg-[#F2EAFA] px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#6C428E] sm:text-xs">
+                  {idx === 1 ? 'WhatsApp Online' : 'Official Hotline'}
+                </span>
+                <h3 className="mt-4 text-lg sm:text-xl font-black text-[#2D1B3E] sm:mt-5">{label}</h3>
+                <p className="mt-2 text-xs sm:text-sm font-semibold leading-6 text-[#584168]">{value}</p>
+              </div>
+
+              {idx === 1 && (
+                <button
+                  onClick={openWhatsApp}
+                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-xs font-black text-white shadow-md transition-all hover:bg-[#1EBE5B] active:scale-95"
+                >
+                  <span>💬</span> Live Chat
+                </button>
+              )}
             </article>
           ))}
         </div>
+
         <div className="mt-8 rounded-[1.5rem] bg-[#2D1B3E] p-6 text-center text-white shadow-xl transition-all duration-300 hover:shadow-2xl sm:mt-10 sm:p-8">
           <h2 className="text-xl sm:text-2xl font-black text-white">Ready to meet your new puppy?</h2>
           <p className="mt-2 text-xs sm:text-sm text-purple-100 sm:mt-3">Browse our current available Yorkies and Shih Tzus and submit your adoption application today.</p>
-          <button onClick={() => navigate('puppies')} className="mt-5 rounded-2xl bg-[#EBCB8B] px-6 py-3 text-xs sm:text-sm font-extrabold text-[#231233] transition-all duration-300 hover:scale-105 hover:bg-white active:scale-95 sm:mt-6">
-            Browse Available Puppies
-          </button>
+          <div className="mt-5 flex flex-wrap justify-center gap-3 sm:mt-6">
+            <button onClick={() => navigate('puppies')} className="rounded-2xl bg-[#EBCB8B] px-6 py-3 text-xs sm:text-sm font-extrabold text-[#231233] transition-all duration-300 hover:scale-105 hover:bg-white active:scale-95">
+              Browse Available Puppies
+            </button>
+            <button onClick={openWhatsApp} className="rounded-2xl bg-[#25D366] px-6 py-3 text-xs sm:text-sm font-extrabold text-white transition-all duration-300 hover:scale-105 hover:bg-[#1EBE5B] active:scale-95 flex items-center gap-2">
+              <span>💬</span> Live Chat
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -1275,7 +1312,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white font-sans text-[#2D1B3E] selection:bg-[#E8DAF0]">
+    <div className="min-h-screen bg-white font-sans text-[#2D1B3E] selection:bg-[#E8DAF0] overflow-x-hidden">
       <AnimationStyles />
       <Header page={page} navigate={navigate} browse={browse} />
       <main className="transition-opacity duration-300">
