@@ -2,9 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { api } from './api.js';
 import ChatPanel from './ChatPanel.jsx';
 
-const blank = { name: '', breedType: 'Yorkie', age: '', weight: '', gender: '', color: '', adoptionFee: '', status: 'Available', personality: '', healthNotes: '', parents: '', images: '' };
+const blank = {
+  name: '',
+  breedType: 'Yorkie',
+  age: '',
+  weight: '',
+  gender: 'Male',
+  color: '',
+  adoptionFee: '350',
+  status: 'Available',
+  personality: '',
+  healthNotes: '',
+  parents: '',
+  images: ''
+};
+
 const inputClass = 'w-full rounded-xl border border-[#E4D8EA] bg-white px-3 py-3 text-sm outline-none focus:border-[#8A659F]';
-const requiredFields = ['name', 'age', 'weight', 'gender', 'color', 'adoptionFee', 'personality', 'healthNotes', 'parents', 'images'];
 
 export default function AdminPanel() {
   const [token, setToken] = useState(() => sessionStorage.getItem('adminToken') || '');
@@ -22,11 +35,12 @@ export default function AdminPanel() {
     if (!token) return;
     try {
       const [listedPuppies, inbox] = await Promise.all([
-        api('/puppies'), api('/admin/conversations', { token }),
+        api('/puppies'),
+        api('/admin/conversations', { token }),
       ]);
-      setPuppies(listedPuppies);
 
-      // Safe filter: show all valid conversations in the inbox
+      setPuppies(Array.isArray(listedPuppies) ? listedPuppies : []);
+
       const validConversations = Array.isArray(inbox) ? inbox : [];
       setConversations(validConversations);
 
@@ -36,7 +50,7 @@ export default function AdminPanel() {
       }
       setError('');
     } catch (err) {
-      if (/sign in|administrator/i.test(err.message)) logout();
+      if (/sign in|administrator|unauthorized|jwt/i.test(err.message)) logout();
       else setError(err.message);
     }
   };
@@ -57,7 +71,10 @@ export default function AdminPanel() {
     event.preventDefault();
     setError('');
     try {
-      const result = await api('/admin/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+      const result = await api('/admin/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
       sessionStorage.setItem('adminToken', result.token);
       setToken(result.token);
       setPassword('');
@@ -66,16 +83,19 @@ export default function AdminPanel() {
     }
   };
 
-  const resetForm = () => { setForm(blank); setEditingId(''); };
+  const resetForm = () => {
+    setForm(blank);
+    setEditingId('');
+  };
 
   const editPuppy = (puppy) => {
     setEditingId(puppy.id);
     setForm({
       ...blank,
       ...puppy,
-      adoptionFee: String(puppy.adoptionFee).replace(/[^\d.]/g, ''),
-      personality: Array.isArray(puppy.personality) ? puppy.personality.join(', ') : puppy.personality,
-      images: Array.isArray(puppy.images) ? puppy.images.join('\n') : puppy.images
+      adoptionFee: String(puppy.adoptionFee || '').replace(/[^\d.]/g, ''),
+      personality: Array.isArray(puppy.personality) ? puppy.personality.join(', ') : puppy.personality || '',
+      images: Array.isArray(puppy.images) ? puppy.images.join('\n') : puppy.images || ''
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -84,13 +104,25 @@ export default function AdminPanel() {
     event.preventDefault();
     setError('');
     setNotice('');
+
+    const parsedFee = Number(String(form.adoptionFee).replace(/[^\d.]/g, ''));
+    const imagesArray = form.images.split(/\n|,/).map((val) => val.trim()).filter(Boolean);
+    const personalityArray = form.personality.split(',').map((val) => val.trim()).filter(Boolean);
+
     const payload = {
       ...form,
-      images: form.images.split(/\n|,/).map((value) => value.trim()).filter(Boolean),
-      personality: form.personality.split(',').map((value) => value.trim()).filter(Boolean)
+      adoptionFee: parsedFee,
+      images: imagesArray,
+      personality: personalityArray
     };
+
     try {
-      await api(editingId ? `/puppies/${editingId}` : '/puppies', { token, method: editingId ? 'PUT' : 'POST', body: JSON.stringify(payload) });
+      await api(editingId ? `/puppies/${editingId}` : '/puppies', {
+        token,
+        method: editingId ? 'PUT' : 'POST',
+        body: JSON.stringify(payload)
+      });
+
       setNotice(editingId ? 'Puppy listing updated.' : 'Puppy listing added.');
       resetForm();
       await refresh();
@@ -149,50 +181,78 @@ export default function AdminPanel() {
           <section className="rounded-2xl border border-[#EADFF0] bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-black text-[#3B2350]">{editingId ? 'Edit puppy listing' : 'Add a puppy'}</h2>
             <p className="mt-2 text-sm leading-6 text-[#5C4763]">
-              All fields are required. Listing facts must be checked against the puppy’s records.
+              All fields are required. Adoption fees must be between $300 and $600.
             </p>
             <form onSubmit={savePuppy} className="mt-5 grid gap-3 sm:grid-cols-2">
-              {[
-                ['name', 'Puppy name'], ['breedType', 'Breed'], ['age', 'Age'], ['weight', 'Weight'], ['gender', 'Sex'], ['color', 'Color'], ['adoptionFee', 'Adoption fee ($)'], ['status', 'Status']
-              ].map(([key, label]) => (
-                <label key={key} className="text-xs font-bold text-[#5C4763]">
-                  {label}<span className="ml-1 text-red-600">*</span>
-                  {key === 'breedType' ? (
-                    <select required value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} className={`${inputClass} mt-1`}>
-                      <option>Yorkie</option>
-                      <option>Shih Tzu</option>
-                    </select>
-                  ) : key === 'status' ? (
-                    <select required value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} className={`${inputClass} mt-1`}>
-                      <option>Available</option>
-                      <option>Reserved</option>
-                      <option>Adopted</option>
-                    </select>
-                  ) : (
-                    <input
-                      required
-                      type={key === 'adoptionFee' ? 'number' : 'text'}
-                      value={form[key]}
-                      onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                      className={`${inputClass} mt-1`}
-                    />
-                  )}
-                </label>
-              ))}
+              <label className="text-xs font-bold text-[#5C4763]">
+                Puppy name<span className="ml-1 text-red-600">*</span>
+                <input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
 
-              {requiredFields.filter((key) => !['name', 'age', 'weight', 'gender', 'color', 'adoptionFee'].includes(key)).map((key) => (
-                <label key={key} className="text-xs font-bold text-[#5C4763] sm:col-span-2">
-                  {key === 'images' ? 'Photo URLs (one per line)' : key === 'healthNotes' ? 'Health notes / records status' : key === 'parents' ? 'Known background' : 'Personality'}
-                  <span className="ml-1 text-red-600">*</span>
-                  <textarea
-                    required
-                    rows={key === 'images' || key === 'healthNotes' ? 3 : 2}
-                    value={form[key]}
-                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                    className={`${inputClass} mt-1`}
-                  />
-                </label>
-              ))}
+              <label className="text-xs font-bold text-[#5C4763]">
+                Breed<span className="ml-1 text-red-600">*</span>
+                <select required value={form.breedType} onChange={(e) => setForm({ ...form, breedType: e.target.value })} className={`${inputClass} mt-1`}>
+                  <option value="Yorkie">Yorkie</option>
+                  <option value="Shih Tzu">Shih Tzu</option>
+                </select>
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763]">
+                Age<span className="ml-1 text-red-600">*</span>
+                <input required type="text" placeholder="e.g. 10 weeks" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763]">
+                Weight<span className="ml-1 text-red-600">*</span>
+                <input required type="text" placeholder="e.g. 2.4 lbs" value={form.weight} onChange={(e) => setForm({ ...form, weight: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763]">
+                Sex<span className="ml-1 text-red-600">*</span>
+                <select required value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })} className={`${inputClass} mt-1`}>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763]">
+                Color<span className="ml-1 text-red-600">*</span>
+                <input required type="text" value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763]">
+                Adoption fee ($300-$600)<span className="ml-1 text-red-600">*</span>
+                <input required type="number" min="300" max="600" value={form.adoptionFee} onChange={(e) => setForm({ ...form, adoptionFee: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763]">
+                Status<span className="ml-1 text-red-600">*</span>
+                <select required value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={`${inputClass} mt-1`}>
+                  <option value="Available">Available</option>
+                  <option value="Reserved">Reserved</option>
+                  <option value="Adopted">Adopted</option>
+                </select>
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763] sm:col-span-2">
+                Personality (comma-separated)<span className="ml-1 text-red-600">*</span>
+                <input required type="text" placeholder="Playful, Affectionate, Smart" value={form.personality} onChange={(e) => setForm({ ...form, personality: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763] sm:col-span-2">
+                Health notes<span className="ml-1 text-red-600">*</span>
+                <textarea required rows={2} value={form.healthNotes} onChange={(e) => setForm({ ...form, healthNotes: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763] sm:col-span-2">
+                Known background / Parents<span className="ml-1 text-red-600">*</span>
+                <textarea required rows={2} value={form.parents} onChange={(e) => setForm({ ...form, parents: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
+
+              <label className="text-xs font-bold text-[#5C4763] sm:col-span-2">
+                Photo URLs (one per line)<span className="ml-1 text-red-600">*</span>
+                <textarea required rows={3} value={form.images} onChange={(e) => setForm({ ...form, images: e.target.value })} className={`${inputClass} mt-1`} />
+              </label>
 
               <div className="flex flex-wrap gap-2 sm:col-span-2">
                 <button className="rounded-xl bg-[#3B2350] px-5 py-3 font-extrabold text-white">
@@ -207,6 +267,7 @@ export default function AdminPanel() {
             </form>
           </section>
 
+          {/* Listings Overview */}
           <section className="rounded-2xl border border-[#EADFF0] bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-black text-[#3B2350]">Puppy listings</h2>
@@ -215,7 +276,7 @@ export default function AdminPanel() {
             <div className="mt-5 max-h-[42rem] space-y-3 overflow-y-auto">
               {puppies.map((puppy) => (
                 <article key={puppy.id} className="flex items-center gap-3 rounded-xl border border-[#EEE5F2] p-3">
-                  <img src={Array.isArray(puppy.images) ? puppy.images[0] : puppy.images} alt="" className="h-16 w-16 rounded-lg object-cover" />
+                  <img src={Array.isArray(puppy.images) ? puppy.images[0] : puppy.images} alt="" className="h-16 w-16 rounded-lg object-cover bg-purple-50" />
                   <div className="min-w-0 flex-1">
                     <b className="block text-[#3B2350]">{puppy.name}</b>
                     <span className="text-xs text-[#6B4A86]">{puppy.breedType} · {puppy.adoptionFee} · {puppy.status}</span>
@@ -247,8 +308,6 @@ export default function AdminPanel() {
               {conversations.map((chat) => {
                 const displayName = chat.visitorName || chat.name || 'Adoption Visitor';
                 const displayEmail = chat.visitorEmail || chat.email || 'No email provided';
-                const displayPhone = chat.visitorPhone || chat.phone || '';
-                const displayLocation = chat.visitorLocation || chat.location || '';
 
                 return (
                   <button
@@ -272,11 +331,6 @@ export default function AdminPanel() {
                         <p className="font-bold text-[#3B2350]">🐾 Inquiring about {chat.puppyName}</p>
                       )}
                       <p className="truncate">✉ {displayEmail}</p>
-                      {(displayPhone || displayLocation) && (
-                        <p className="truncate text-[11px] text-[#8668A1]">
-                          {displayPhone && `📞 ${displayPhone}`} {displayLocation && `• 📍 ${displayLocation}`}
-                        </p>
-                      )}
                     </div>
 
                     <time className="mt-2 block text-[10px] font-semibold text-[#8A75A0]">
@@ -302,12 +356,8 @@ export default function AdminPanel() {
                         </span>
                       )}
                     </div>
-                    <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-purple-200/90 border-t border-white/10 pt-2">
+                    <div className="mt-2 text-xs text-purple-200/90 border-t border-white/10 pt-2">
                       <p>✉ {selectedChat.visitorEmail || selectedChat.email || 'N/A'}</p>
-                      <p>📞 {selectedChat.visitorPhone || selectedChat.phone || 'N/A'}</p>
-                      {(selectedChat.visitorLocation || selectedChat.location) && (
-                        <p className="col-span-2">📍 Location: {selectedChat.visitorLocation || selectedChat.location}</p>
-                      )}
                     </div>
                   </div>
                   <div className="flex-1 min-h-0 overflow-hidden">
@@ -315,12 +365,6 @@ export default function AdminPanel() {
                       conversationId={selectedChat.id}
                       token={token}
                       admin
-                      userProfile={{
-                        name: selectedChat.visitorName || selectedChat.name,
-                        email: selectedChat.visitorEmail || selectedChat.email,
-                        phone: selectedChat.visitorPhone || selectedChat.phone,
-                        location: selectedChat.visitorLocation || selectedChat.location
-                      }}
                     />
                   </div>
                 </>
